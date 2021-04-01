@@ -1,3 +1,11 @@
+# Eclipse folders
+Debug
+Release
+.settings
+
+# CMake
+# TODO
+
 # Prerequisites
 *.d
 
