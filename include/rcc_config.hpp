@@ -16,7 +16,7 @@ static constexpr rcc_traits::pll_config_t pll_config = { 2, 16, 2, 2};
 typedef rcc_c <
 		rcc_traits::hsclk_src_t::HSI, 16000000,
 		pll_config,
-		1, 2
+		1, 1
 		> rcc;
 
 

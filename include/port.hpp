@@ -12,7 +12,7 @@ extern "C" {
 #include "stm32g0xx.h"
 }
 
-namespace gpio {
+namespace gpio_traits {
 	enum class port_t : uint32_t {
 		PORTA = GPIOA_BASE,
 		PORTB = GPIOB_BASE,
@@ -22,8 +22,13 @@ namespace gpio {
 	};
 }
 
-template<gpio::port_t TPort>
+template<gpio_traits::port_t TPort>
 class port_c {
+
+	static inline constexpr GPIO_TypeDef volatile* PORTx()
+	{
+		return reinterpret_cast<GPIO_TypeDef*>(TPort);
+	};
 
 public:
 	static void ConfigAsIn(uint8_t pin) noexcept {
@@ -43,37 +48,80 @@ public:
 	}
 
 	static inline void WritePort(uint16_t state) noexcept {
-		static_cast<GPIO_TypeDef*>(TPort)->ODR = state;
+		PORTx()->ODR = state;
 	}
 
 	static inline void WritePin(uint8_t pin, bool state) noexcept {
-//		static_assert(pin <= 0 && pin <= 15, "Pin not in range!");
 		if (state) {
-			static_cast<GPIO_TypeDef*>(TPort)->BSRR |= static_cast<uint32_t>(1 << pin);
+			PORTx()->BSRR |= static_cast<uint32_t>(1 << pin);
 		} else {
-			static_cast<GPIO_TypeDef*>(TPort)->BSRR |= static_cast<uint32_t>(1 << (pin + 16));
+			PORTx()->BSRR |= static_cast<uint32_t>(1 << (pin + 16));
 		}
 	}
 
 	static inline uint16_t ReadPort() noexcept {
-		return static_cast<uint16_t>(static_cast<GPIO_TypeDef*>(TPort)->IDR);
+		return static_cast<uint16_t>(PORTx()->IDR);
 	}
 
 	static inline uint16_t ReadPortOut() noexcept {
-		return static_cast<uint16_t>(static_cast<GPIO_TypeDef*>(TPort)->ODR);
+		return static_cast<uint16_t>(PORTx()->ODR);
 	}
 
 	static inline uint8_t ReadPin(uint8_t pin) noexcept {
-//		static_assert(pin <= 0 && pin <= 15, "Pin not in range!");
-		return static_cast<uint8_t>(((static_cast<GPIO_TypeDef*>(TPort)->IDR) >> pin) & 0x1);
+		return static_cast<uint8_t>(((PORTx()->IDR) >> pin) & 0x1);
 	}
 
 	static inline uint8_t ReadPinOut(uint8_t pin) noexcept {
-//		static_assert(pin <= 0 && pin <= 15, "Pin not in range!");
-		return static_cast<uint8_t>(((static_cast<GPIO_TypeDef*>(TPort)->ODR) >> pin) & 0x1);
+		return static_cast<uint8_t>(((PORTx()->ODR) >> pin) & 0x1);
 	}
+
+	static constexpr void ClockEnable() noexcept {
+		static_assert((TPort == gpio_traits::port_t::PORTA) ||
+					  (TPort == gpio_traits::port_t::PORTB) ||
+					  (TPort == gpio_traits::port_t::PORTC) ||
+					  (TPort == gpio_traits::port_t::PORTD) ||
+					  (TPort == gpio_traits::port_t::PORTF), "Invalid port");
+		if (TPort == gpio_traits::port_t::PORTA) {
+			RCC->IOPENR |= RCC_IOPENR_GPIOAEN;
+		} else if (TPort == gpio_traits::port_t::PORTB) {
+			RCC->IOPENR |= RCC_IOPENR_GPIOBEN;
+		} else if (TPort == gpio_traits::port_t::PORTC) {
+			RCC->IOPENR |= RCC_IOPENR_GPIOCEN;
+		} else if (TPort == gpio_traits::port_t::PORTD) {
+			RCC->IOPENR |= RCC_IOPENR_GPIODEN;
+		} else if (TPort == gpio_traits::port_t::PORTF) {
+			RCC->IOPENR |= RCC_IOPENR_GPIOFEN;
+		}
+	}
+
+	static constexpr void ClockDisable() noexcept {
+		static_assert((TPort == gpio_traits::port_t::PORTA) ||
+					  (TPort == gpio_traits::port_t::PORTB) ||
+					  (TPort == gpio_traits::port_t::PORTC) ||
+					  (TPort == gpio_traits::port_t::PORTD) ||
+					  (TPort == gpio_traits::port_t::PORTF), "Invalid port");
+		if (TPort == gpio_traits::port_t::PORTA) {
+			RCC->IOPENR &= ~RCC_IOPENR_GPIOAEN;
+		} else if (TPort == gpio_traits::port_t::PORTB) {
+			RCC->IOPENR &= ~RCC_IOPENR_GPIOBEN;
+		} else if (TPort == gpio_traits::port_t::PORTC) {
+			RCC->IOPENR &= ~RCC_IOPENR_GPIOCEN;
+		} else if (TPort == gpio_traits::port_t::PORTD) {
+			RCC->IOPENR &= ~RCC_IOPENR_GPIODEN;
+		} else if (TPort == gpio_traits::port_t::PORTF) {
+			RCC->IOPENR &= ~RCC_IOPENR_GPIOFEN;
+		}
+	}
+
 };
 
+typedef port_c <gpio_traits::port_t::PORTA> PORTA;
+typedef port_c <gpio_traits::port_t::PORTB> PORTB;
+typedef port_c <gpio_traits::port_t::PORTC> PORTC;
+typedef port_c <gpio_traits::port_t::PORTD> PORTD;
+typedef port_c <gpio_traits::port_t::PORTF> PORTF;
+
+///////////////////////////////////////////////////////////
 //typedef struct
 //{
 //  __IO uint32_t MODER;       /*!< GPIO port mode register,               Address offset: 0x00      */
