@@ -8,7 +8,9 @@
 #ifndef INCLUDE_PIN_USAGE_HPP_
 #define INCLUDE_PIN_USAGE_HPP_
 
+
 #include "pin.hpp"
+
 
 // VBAT1 VBAT2
 using PA0 = pin_c<gpio_traits::port_t::PORTA, 0>;
@@ -36,5 +38,6 @@ using PA8  = pin_c<gpio_traits::port_t::PORTA, 8>;
 using PA9  = pin_c<gpio_traits::port_t::PORTA, 9>;
 using PC6  = pin_c<gpio_traits::port_t::PORTC, 6>;
 using PA10 = pin_c<gpio_traits::port_t::PORTA, 10>;
+
 
 #endif /* INCLUDE_PIN_USAGE_HPP_ */

@@ -28,10 +28,11 @@ namespace rcc_traits{
 
 
 template<rcc_traits::hsclk_src_t TClk, const uint32_t TClkFreq, const rcc_traits::pll_config_t& TPLLConfig,
-		 uint16_t TAHBDiv, uint16_t TAPBDiv>
+		 uint16_t TAHBDiv, uint16_t TAPBDiv, const uint32_t TDesiredFreq>
 class rcc_c {
 
 public:
+
 	static void Init() noexcept {
 		static_assert((TPLLConfig.M >= 1) && (TPLLConfig.M <= 8),  "PLL M not in range!");
 		static_assert((TPLLConfig.N >= 8) && (TPLLConfig.N <= 86), "PLL N not in range!");
@@ -67,10 +68,24 @@ public:
 		// switch sysclock source
 		MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, 0b010UL << RCC_CFGR_SW_Pos);
 		while((RCC->CFGR & RCC_CFGR_SW) != (0b010UL << RCC_CFGR_SW_Pos));
+
+		static_assert(TDesiredFreq ==
+					 (TClkFreq / TPLLConfig.M * TPLLConfig.N / TPLLConfig.R),
+					 "SYSCLOCK frequency not match");
+		static_assert(TDesiredFreq ==
+					 (TClkFreq / TPLLConfig.M * TPLLConfig.N / TPLLConfig.R / TAHBDiv),
+					 "HCLK frequency not match");
+		static_assert(TDesiredFreq ==
+					 (TClkFreq / TPLLConfig.M * TPLLConfig.N / TPLLConfig.R / TAHBDiv / TAPBDiv),
+					 "HCLK frequency not match");
 	}
 
 	static inline void Reset() noexcept {
 		NVIC_SystemReset();
+	}
+
+	static void ConfigSysClockMs(uint32_t period_ms) noexcept {
+		SysTick_Config(TDesiredFreq / 1000 * period_ms);
 	}
 };
 
