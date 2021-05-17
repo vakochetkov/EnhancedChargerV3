@@ -8,22 +8,26 @@
 #ifndef INCLUDE_RCC_HPP_
 #define INCLUDE_RCC_HPP_
 
+
 extern "C" {
 #include "stm32g0xx.h"
 }
 
-namespace rcc_traits{
-	enum class hsclk_src_t : uint8_t {
-		HSE = 0,
-		HSI
-	};
 
-	typedef struct {
-		uint32_t M;
-		uint32_t N;
-		uint32_t R;
-		uint32_t P;
-	} pll_config_t;
+namespace rcc_traits {
+enum class hsclk_src_t : uint8_t {
+	HSE = 0,
+			HSI
+};
+
+typedef struct {
+	uint32_t M;
+	uint32_t N;
+	uint32_t R;
+	uint32_t P;
+} pll_config_t;
+
+extern volatile uint32_t SYSTICK;
 }
 
 
@@ -91,6 +95,10 @@ public:
 
 	static void ConfigSysClockMs(uint32_t period_ms) noexcept {
 		SysTick_Config(TDesiredFreq / 1000 * period_ms);
+	}
+
+	static inline volatile uint32_t GetTick() noexcept {
+		return rcc_traits::SYSTICK;
 	}
 };
 

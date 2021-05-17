@@ -7,8 +7,13 @@
 
 #include "rcc.hpp"
 
-extern "C" void SysTick_Handler(void) {
+namespace rcc_traits {
+volatile uint32_t SYSTICK = 0;
+}
 
+
+extern "C" void SysTick_Handler(void) {
+	rcc_traits::SYSTICK++;
 }
 
 
