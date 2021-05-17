@@ -17,9 +17,9 @@ namespace template_map {
  * 	using keys =   KeyValueContainer<int, 1, 2, 3>;
  * 	using values = KeyValueContainer<int, 4, 5, 6>;
  * 	constexpr template_map::Map<keys, values> testMap;
- * 	static_assert (testMap[10] == 20, "Error");
- * 	static_assert (testMap[11] == 21, "Error");
- * 	static_assert (testMap[23] == 70, "Error");
+ * 	static_assert (testMap[1] == 4, "Error");
+ * 	static_assert (testMap[2] == 5, "Error");
+ * 	static_assert (testMap[3] == 6, "Error");
  */
 
 template<typename MemberType, MemberType... values>

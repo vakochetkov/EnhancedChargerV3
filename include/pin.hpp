@@ -49,6 +49,30 @@ public:
 		PORT::ConfigAsAnalog(TPin);
 	}
 
+	static constexpr void Write(uint8_t state) noexcept {
+		PORT::WritePin(TPin, state);
+	}
+
+	static constexpr uint8_t Read() noexcept {
+		return PORT::ReadPin(TPin);
+	}
+
+	static constexpr void Set() noexcept {
+		Write(1);
+	}
+
+	static constexpr void Clear() noexcept {
+		Write(0);
+	}
+
+	static constexpr bool IsSet() noexcept {
+		return (Read());
+	}
+
+	static constexpr bool IsClear() noexcept {
+		return (!Read());
+	}
+
 };
 
 inline void test_pin_gpio() noexcept {

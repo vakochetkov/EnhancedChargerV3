@@ -108,9 +108,13 @@ class exti_c {
 		}
 	}
 
+	static constexpr uint32_t _get_pos_flag_mask(const uint8_t line) noexcept {
+		return static_cast<uint32_t>(1 << line);
+	}
+
 public:
 	static void Init() noexcept {
-		RCC->APBENR2 |= RCC_APBENR2_SYSCFGEN; // enable to be sure
+		RCC->APBENR2 |= RCC_APBENR2_SYSCFGEN; // enable to be sure, not used
 	}
 
 	// NB: only one GPIO port can obtain EXTI line (e.g. PA2 excludes PB2 EXTI usage)
@@ -123,19 +127,30 @@ public:
 	static constexpr void ConfigureExtiPin() noexcept {
 		const auto PORT = TPin::PORT_TYPE;
 		const auto PIN = TPin::PIN;
-		EXTI->EXTICR[_calc_cr_pos<PIN>()] = _calc_cr_shift<PORT, PIN>();
+		EXTI->EXTICR[_calc_cr_pos<PIN>()] |= _calc_cr_shift<PORT, PIN>();
 
-		EXTI->RTSR1 |= _get_enable_rise_mask<edge>(TPin::PIN);
-		EXTI->FTSR1 |= _get_enable_fall_mask<edge>(TPin::PIN);
+		EXTI->RTSR1 |= _get_enable_rise_mask<edge>(PIN);
+		EXTI->FTSR1 |= _get_enable_fall_mask<edge>(PIN);
 
-		EXTI->IMR1 |= _get_enable_interrupt_mask<type>(TPin::PIN);
-		EXTI->EMR1 |= _get_enable_event_mask<type>(TPin::PIN);
+		EXTI->IMR1 |= _get_enable_interrupt_mask<type>(PIN);
+		EXTI->EMR1 |= _get_enable_event_mask<type>(PIN);
 
 	}
 
 	template<typename TPin>
 	static constexpr uint32_t GetIrqMask() noexcept {
 		return static_cast<uint32_t>(1 << TPin::PIN);
+	}
+
+	template<typename TPin, exti_traits::edge_trigger_t edge>
+	static constexpr void ClearIrqFlag() noexcept {
+		static_assert(edge != exti_traits::edge_trigger_t::BOTH, "BOTH edge is invalid!");
+		if constexpr (edge == exti_traits::edge_trigger_t::FALLING) {
+			EXTI->FPR1 |= _get_pos_flag_mask(TPin::PIN);
+		}
+		if constexpr (edge == exti_traits::edge_trigger_t::RISING) {
+			EXTI->RPR1 |= _get_pos_flag_mask(TPin::PIN);
+		}
 	}
 
 

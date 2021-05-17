@@ -32,7 +32,7 @@ public:
 		NVIC_EnableIRQ(EXTI0_1_IRQn);
 	}
 
-	// 896	      8	   1568	   2472	    9a8
+
 	// button dispatcher
 	template<typename TBtn>
 	static constexpr void ButtonsCallback(exti_traits::edge_trigger_t edge) {
@@ -54,9 +54,9 @@ public:
 
 	static void Btn2Callback(exti_traits::edge_trigger_t edge) noexcept {
 		if (edge == exti_traits::edge_trigger_t::RISING) {
-			__BKPT(0);
+			__BKPT(2);
 		} else {
-			__BKPT(1);
+			__BKPT(3);
 		}
 	}
 };
