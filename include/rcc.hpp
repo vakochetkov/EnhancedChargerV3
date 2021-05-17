@@ -78,6 +78,11 @@ public:
 		static_assert(TDesiredFreq ==
 					 (TClkFreq / TPLLConfig.M * TPLLConfig.N / TPLLConfig.R / TAHBDiv / TAPBDiv),
 					 "HCLK frequency not match");
+
+		SystemCoreClockUpdate(); 				// update CMSIS variable in run-time
+		if (SystemCoreClock != TDesiredFreq) {  // call debugger if not equal
+			__BKPT(0);
+		}
 	}
 
 	static inline void Reset() noexcept {
