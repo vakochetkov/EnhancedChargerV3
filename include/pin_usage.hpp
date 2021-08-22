@@ -12,32 +12,32 @@
 #include "pin.hpp"
 
 
-// VBAT1 VBAT2
-using PA0 = pin_c<gpio_traits::port_t::PORTA, 0>;
-using PA1 = pin_c<gpio_traits::port_t::PORTA, 1>;
+// ADC
+using PA0 = pin_c<gpio_traits::port_t::PORTA, 0>; // VBAT1
+using PA1 = pin_c<gpio_traits::port_t::PORTA, 1>; // VBAT2
 
-// MDIO NSS MCLK
-using PA2 = pin_c<gpio_traits::port_t::PORTA, 2>;
-using PA4 = pin_c<gpio_traits::port_t::PORTA, 4>;
-using PA5 = pin_c<gpio_traits::port_t::PORTA, 5>;
+// TM1628
+using PA2 = pin_c<gpio_traits::port_t::PORTA, 2>; // MDIO
+using PA4 = pin_c<gpio_traits::port_t::PORTA, 4>; // NSS (LATCH)
+using PA5 = pin_c<gpio_traits::port_t::PORTA, 5>; // MCLK
 
 // BTN1 BTN2
 using PB0 = pin_c<gpio_traits::port_t::PORTB, 0>;
 using PB1 = pin_c<gpio_traits::port_t::PORTB, 1>;
 
 // ISET 1
-using PB4 = pin_c<gpio_traits::port_t::PORTB, 4>;
-using PB5 = pin_c<gpio_traits::port_t::PORTB, 5>;
-using PB6 = pin_c<gpio_traits::port_t::PORTB, 6>;
-using PB7 = pin_c<gpio_traits::port_t::PORTB, 7>;
-using PB8 = pin_c<gpio_traits::port_t::PORTB, 8>;
+using PB4 = pin_c<gpio_traits::port_t::PORTB, 4>; // 0.5 A
+using PB5 = pin_c<gpio_traits::port_t::PORTB, 5>; // 1.0 A
+using PB6 = pin_c<gpio_traits::port_t::PORTB, 6>; // 1.5 A
+using PB7 = pin_c<gpio_traits::port_t::PORTB, 7>; // 2.0 A
+using PB8 = pin_c<gpio_traits::port_t::PORTB, 8>; // 2.5 A
 
 // ISET 2
-using PB2  = pin_c<gpio_traits::port_t::PORTB, 2>;
-using PA8  = pin_c<gpio_traits::port_t::PORTA, 8>;
-using PA9  = pin_c<gpio_traits::port_t::PORTA, 9>;
-using PC6  = pin_c<gpio_traits::port_t::PORTC, 6>;
-using PA10 = pin_c<gpio_traits::port_t::PORTA, 10>;
+using PB2  = pin_c<gpio_traits::port_t::PORTB, 2>;  // 0.5 A
+using PA8  = pin_c<gpio_traits::port_t::PORTA, 8>;  // 1.0 A
+using PA9  = pin_c<gpio_traits::port_t::PORTA, 9>;  // 1.5 A
+using PC6  = pin_c<gpio_traits::port_t::PORTC, 6>;  // 2.0 A
+using PA10 = pin_c<gpio_traits::port_t::PORTA, 10>; // 2.5 A
 
 
 #endif /* INCLUDE_PIN_USAGE_HPP_ */

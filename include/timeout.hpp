@@ -39,6 +39,10 @@ public:
 		startTick = FGetTick();
 	}
 
+	bool IsSet() noexcept {
+		return (state != timeout_state_t::ST_IDLE);
+	}
+
 	void Update() noexcept {
 		if ((FGetTick() - startTick) >= interval) {
 			state = timeout_state_t::ST_ALARM;
@@ -57,6 +61,10 @@ public:
 		startTick = 0;
 		interval  = 0;
 		state = timeout_state_t::ST_IDLE;
+	}
+
+	inline void Reset() noexcept {
+		Clear();
 	}
 };
 

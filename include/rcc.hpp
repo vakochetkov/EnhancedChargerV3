@@ -13,11 +13,12 @@ extern "C" {
 #include "stm32g0xx.h"
 }
 
+extern "C" void delay_ms(uint32_t ms);
 
 namespace rcc_traits {
 enum class hsclk_src_t : uint8_t {
 	HSE = 0,
-			HSI
+	HSI
 };
 
 typedef struct {
@@ -85,7 +86,7 @@ public:
 
 		SystemCoreClockUpdate(); 				// update CMSIS variable in run-time
 		if (SystemCoreClock != TDesiredFreq) {  // call debugger if not equal
-			__BKPT(0);
+			//__BKPT(0);
 		}
 	}
 
