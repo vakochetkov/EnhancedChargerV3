@@ -23,8 +23,8 @@ class indicator_base_c {
 	static constexpr uint8_t digitsSize = (sizeof(digits) / sizeof(digits[0]));
 
 	static constexpr uint8_t letters[] = {
-		0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x54, 0x5C, 0x3E, 0x77, 0x06
-	}; // A		B	  C		D	  E		F     n		o	  V		A	  I
+		0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x54, 0x5C, 0x3E, 0x77, 0x06, 0x38
+	}; // A		b	  C		D	  E		F     n		o	  V		A	  I		L
 	static constexpr uint8_t lettersSize = (sizeof(letters) / sizeof(letters[0]));
 
 	static constexpr uint8_t miscSymbols[] = {
@@ -94,14 +94,16 @@ public:
 	}
 
 	/*
-	 * Blocks execution for 500ms
+	 * Blocks execution for 1000ms
 	 */
 	static void ShowAnimationOverload() noexcept {
 		for (uint8_t i = 0; i < 5; i++) { // blink 5 times
 			TM1628::WriteDigit(I1, digits[0]);
-			TM1628::WriteDigit(I2, letters[8]);
+			TM1628::WriteDigit(I2, letters[11]);
 			TM1628::WriteDigit(I3, digits[0]);
-			TM1628::WriteDigit(I4, letters[8]);
+			TM1628::WriteDigit(I4, letters[11]);
+			delay_ms(100);
+			Clear();
 			delay_ms(100);
 		}
 		Clear();

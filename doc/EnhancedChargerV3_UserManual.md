@@ -20,3 +20,9 @@
 4. Insert batteries in battery slots
 5. When charging is complete, green leds should light up
 
+### Indication explanation:
+* In normal mode charger shows voltage ("U=x.x") and current ("A=x.x") alternately
+* In current set mode the dot in the lower right corner is shown
+* When both slots are active, charger current falls back to 1A and "OL" (overload) sign is shown
+
+

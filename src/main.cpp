@@ -27,6 +27,8 @@ int main() {
 	exti::Init();
 	BTN::Init();
 
+	ADCD::Init();
+
 	IND::Init();
 	IND::ShowBootLogo();
 

@@ -28,7 +28,7 @@ class controller_c {
 		LAST_STATE
 	};
 
-	static constexpr uint16_t CURRENT_LIMIT_MV = 4000;
+	static constexpr uint16_t CURRENT_LIMIT_MV = 4050;
 	static constexpr uint16_t timeoutMs = 3000;
 	static constexpr uint16_t showTimeoutMs = 1500;
 
@@ -46,14 +46,20 @@ class controller_c {
 	}
 
 	static void checkCurrentLimiter() noexcept {
-		measureVoltages();
+		static bool firstTime = true;
 
+		measureVoltages();
 		if ((voltageBat1 < CURRENT_LIMIT_MV)
 			&& (voltageBat2 < CURRENT_LIMIT_MV)) {
 
 			CURSEL1::Set(current_t::CUR_1A0);
 			CURSEL2::Set(current_t::CUR_1A0);
-			IND::ShowAnimationOverload();
+			if (firstTime) {
+				IND::ShowAnimationOverload();
+				firstTime = false;
+			}
+		} else {
+			firstTime = true;
 		}
 	}
 
