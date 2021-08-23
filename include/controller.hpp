@@ -28,7 +28,8 @@ class controller_c {
 		LAST_STATE
 	};
 
-	static constexpr uint16_t CURRENT_LIMIT_MV = 4050;
+	static constexpr uint16_t CURRENT_LIMIT_MV = 4000;
+	static constexpr uint16_t MILLIVOLT_HYSTERESIS = 60;
 	static constexpr uint16_t timeoutMs = 3000;
 	static constexpr uint16_t showTimeoutMs = 1500;
 
@@ -79,10 +80,30 @@ class controller_c {
 	}
 
 	static void showVoltage(indicator_t ind) noexcept {
+		static Timeout t;
+		static uint16_t showVoltage1 = 0;
+		static uint16_t showVoltage2 = 0;
+
+		if (!t.IsSet()) { // update shown digits every x ms + hysteresis
+			// cast to unsigned is necessary!
+			if (static_cast<uint16_t>(voltageBat1 - showVoltage1) > MILLIVOLT_HYSTERESIS) {
+				showVoltage1 = voltageBat1;
+			}
+			if (static_cast<uint16_t>(voltageBat2 - showVoltage2) > MILLIVOLT_HYSTERESIS) {
+				showVoltage2 = voltageBat2;
+			}
+			t.Set(showTimeoutMs);
+		} else {
+			t.Update();
+			if (t.IsTimeOut()) {
+				t.Clear();
+			}
+		}
+
 		if (ind == indicator_t::IND1) {
-			IND::ShowMilli(voltageBat1, ind);
+			IND::ShowMilli(showVoltage1, ind);
 		} else if (ind == indicator_t::IND2) {
-			IND::ShowMilli(voltageBat2, ind);
+			IND::ShowMilli(showVoltage2, ind);
 		}
 	}
 

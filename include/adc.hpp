@@ -21,10 +21,10 @@ class adc_c {
 	// x = (val / 4095 * 3300 * 2)
 	static constexpr uint32_t COEF_MVOLT_DIV = 4095;
 	static constexpr uint32_t COEF_MVOLT_MUL = 3300 * 2;
-	static constexpr uint32_t MVOLT_OFFSET = 0;
+	static constexpr uint32_t MVOLT_OFFSET = 60;
 
 	static uint32_t convertValue(uint32_t value) noexcept {
-		return ((value * COEF_MVOLT_MUL) / COEF_MVOLT_DIV);
+		return (((value * COEF_MVOLT_MUL) / COEF_MVOLT_DIV) + MVOLT_OFFSET);
 	}
 
 	static void startSelfCalibration() noexcept {
@@ -43,10 +43,10 @@ class adc_c {
 	}
 
 	static void setSamplingTime() noexcept {
-		// 1.5 clocks for channels #0 and #1 using SMP1
+		// 7.5 clocks for channels #0 and #1 using SMP1
 		ADC1->SMPR &= ~ADC_SMPR_SMPSEL0;
 		ADC1->SMPR &= ~ADC_SMPR_SMPSEL1;
-		ADC1->SMPR &= ~ADC_SMPR_SMP1; // 1.5 ADC clock cycles
+		ADC1->SMPR |= (0b010UL << ADC_SMPR_SMP1_Pos); // 0b010
 	}
 
 	static void configOversampler() noexcept {
@@ -118,10 +118,16 @@ public:
 		valueChannel2 = read();
 
 		switch(adcChannel) {
-		case 0: return valueChannel1;
-		case 1: return valueChannel2;
+		case 0: return convertValue(valueChannel1);
+		case 1: return convertValue(valueChannel2);
 		default: return 0;
 		}
+	}
+
+	static uint16_t MeasureVoltageMock(uint8_t adcChannel) noexcept {
+		static uint16_t val = 0;
+		val += 10;
+		return val;
 	}
 
 };

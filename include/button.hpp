@@ -23,8 +23,8 @@ class button_c {
 	static inline uint8_t btn2click = 0;
 
 public:
-	using BTN1 = PB0;
-	using BTN2 = PB1;
+	using BTN1 = PB1; // buttons and indicators are mixed up on PCB
+	using BTN2 = PB0;
 
 	static void Init() noexcept {
 		BTN1::ConfigAsIn(gpio_traits::pullup_t::DOWN);

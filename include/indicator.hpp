@@ -80,11 +80,11 @@ public:
 
 	static void ShowTransition(indicator_t ind) noexcept {
 		for (uint8_t i = 0; i < animationClockwiseSize; i++) {
-			if (ind == indicator_t::IND1) {
+			if (ind == indicator_t::IND2) {
 				TM1628::WriteDigit(I1, animationClockwise[i]);
 				TM1628::WriteDigit(I2, animationClockwise[i]);
 			}
-			if (ind == indicator_t::IND2) {
+			if (ind == indicator_t::IND1) {
 				TM1628::WriteDigit(I3, animationClockwise[i]);
 				TM1628::WriteDigit(I4, animationClockwise[i]);
 			}
@@ -110,33 +110,33 @@ public:
 	}
 
 	static void ShowVEqual(indicator_t ind) noexcept {
-		if (ind == indicator_t::IND1) {
+		if (ind == indicator_t::IND2) {
 			TM1628::WriteDigit(I1, letters[8]);
 			TM1628::WriteDigit(I2, miscSymbols[2]);
 		}
-		if (ind == indicator_t::IND2) {
+		if (ind == indicator_t::IND1) {
 			TM1628::WriteDigit(I3, letters[8]);
 			TM1628::WriteDigit(I4, miscSymbols[2]);
 		}
 	}
 
 	static void ShowAEqual(indicator_t ind) noexcept {
-		if (ind == indicator_t::IND1) {
+		if (ind == indicator_t::IND2) {
 			TM1628::WriteDigit(I1, letters[9]);
 			TM1628::WriteDigit(I2, miscSymbols[2]);
 		}
-		if (ind == indicator_t::IND2) {
+		if (ind == indicator_t::IND1) {
 			TM1628::WriteDigit(I3, letters[9]);
 			TM1628::WriteDigit(I4, miscSymbols[2]);
 		}
 	}
 
 	static void ShowIEqual(indicator_t ind) noexcept {
-		if (ind == indicator_t::IND1) {
+		if (ind == indicator_t::IND2) {
 			TM1628::WriteDigit(I1, letters[10]);
 			TM1628::WriteDigit(I2, miscSymbols[2]);
 		}
-		if (ind == indicator_t::IND2) {
+		if (ind == indicator_t::IND1) {
 			TM1628::WriteDigit(I3, letters[10]);
 			TM1628::WriteDigit(I4, miscSymbols[2]);
 		}
@@ -159,7 +159,7 @@ public:
 			fractional = 9;
 		}
 
-		if (ind == indicator_t::IND1) {
+		if (ind == indicator_t::IND2) {
 			TM1628::WriteDigit(I1, digits[integer] | miscSymbols[0]);
 			TM1628::WriteDigit(I2, digits[fractional]);
 		} else {
@@ -175,7 +175,7 @@ public:
 		uint8_t dec  = value / 10;
 		uint8_t ones = value % 10;
 
-		if (ind == indicator_t::IND1) {
+		if (ind == indicator_t::IND2) {
 			TM1628::WriteDigit(I1, digits[dec]  | miscSymbols[0]);
 			TM1628::WriteDigit(I2, (with_dot) ? digits[ones] | miscSymbols[0] : digits[ones]);
 		} else {
