@@ -21,7 +21,7 @@ class adc_c {
 	// x = (val / 4095 * 3300 * 2)
 	static constexpr uint32_t COEF_MVOLT_DIV = 4095;
 	static constexpr uint32_t COEF_MVOLT_MUL = 3300 * 2;
-	static constexpr uint32_t MVOLT_OFFSET = 60;
+	static constexpr uint32_t MVOLT_OFFSET = 80;
 
 	static uint32_t convertValue(uint32_t value) noexcept {
 		return (((value * COEF_MVOLT_MUL) / COEF_MVOLT_DIV) + MVOLT_OFFSET);

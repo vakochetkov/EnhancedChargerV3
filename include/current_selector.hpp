@@ -69,6 +69,7 @@ class current_selector_c {
 	static constexpr auto channel = TChannel;
 	using pins = TPins;
 
+	static cs_traits::current_t maxCurrent;
 	static cs_traits::current_t current;
 
 public:
@@ -85,6 +86,10 @@ public:
 		current = _current;
 	}
 
+	static void SetMax(cs_traits::current_t _maxCurrent) noexcept {
+		maxCurrent = _maxCurrent;
+	}
+
 	/**
 	 *	Release all gpio lines for default IC current
 	 */
@@ -98,7 +103,7 @@ public:
 	}
 
 	static void Next() noexcept {
-		auto newCurrent = (current == cs_traits::current_t::CUR_2A5)
+		auto newCurrent = (current == maxCurrent)
 				? cs_traits::current_t::CUR_0A5
 				: static_cast<cs_traits::current_t>((static_cast<uint8_t>(current) << 1));
 		Set(newCurrent);
@@ -107,6 +112,9 @@ public:
 
 template<cs_traits::channel_t TChannel, typename TPins>
 cs_traits::current_t current_selector_c<TChannel, TPins>::current = cs_traits::current_t::CUR_0A5;
+
+template<cs_traits::channel_t TChannel, typename TPins>
+cs_traits::current_t current_selector_c<TChannel, TPins>::maxCurrent = cs_traits::current_t::CUR_2A5;
 
 
 typedef current_selector_c<cs_traits::channel_t::BAT1, cs_traits::PinsBat1> CURSEL1;

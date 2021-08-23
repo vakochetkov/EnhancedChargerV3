@@ -29,7 +29,7 @@ class controller_c {
 	};
 
 	static constexpr uint16_t CURRENT_LIMIT_MV = 4000;
-	static constexpr uint16_t MILLIVOLT_HYSTERESIS = 60;
+	static constexpr uint16_t MILLIVOLT_HYSTERESIS = 40;
 	static constexpr uint16_t timeoutMs = 3000;
 	static constexpr uint16_t showTimeoutMs = 1500;
 
@@ -53,13 +53,24 @@ class controller_c {
 		if ((voltageBat1 < CURRENT_LIMIT_MV)
 			&& (voltageBat2 < CURRENT_LIMIT_MV)) {
 
-			CURSEL1::Set(current_t::CUR_1A0);
-			CURSEL2::Set(current_t::CUR_1A0);
+			CURSEL1::SetMax(current_t::CUR_1A0);
+			CURSEL2::SetMax(current_t::CUR_1A0);
+
 			if (firstTime) {
+				if (static_cast<uint8_t>(CURSEL1::Get()) > static_cast<uint8_t>(current_t::CUR_1A0)) {
+					CURSEL1::Set(current_t::CUR_1A0);
+				}
+
+				if (static_cast<uint8_t>(CURSEL2::Get()) > static_cast<uint8_t>(current_t::CUR_1A0)) {
+					CURSEL2::Set(current_t::CUR_1A0);
+				}
+
 				IND::ShowAnimationOverload();
 				firstTime = false;
 			}
 		} else {
+			CURSEL1::SetMax(current_t::CUR_2A5);
+			CURSEL2::SetMax(current_t::CUR_2A5);
 			firstTime = true;
 		}
 	}
