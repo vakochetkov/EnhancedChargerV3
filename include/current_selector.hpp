@@ -82,6 +82,10 @@ public:
 	 * Set current limit
 	 */
 	static void Set(cs_traits::current_t _current) noexcept {
+		pins::SetComb(static_cast<uint8_t>(cs_traits::current_t::CUR_2A5));
+		delay_us(5000);
+		pins::SetComb(static_cast<uint8_t>(cs_traits::current_t::CUR_0A5));
+		delay_us(5000);
 		pins::SetComb(static_cast<uint8_t>(_current));
 		current = _current;
 	}

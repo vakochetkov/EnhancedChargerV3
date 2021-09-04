@@ -1,12 +1,7 @@
 #include "stm32g070kb.hpp"
 #include "rcc_config.hpp"
 #include "pin_usage.hpp"
-#include "timeout.hpp"
-#include "indicator.hpp"
-#include "current_selector.hpp"
-#include "adc.hpp"
 #include "exti.hpp"
-#include "button.hpp"
 
 #include "controller.hpp"
 
@@ -20,18 +15,9 @@ int main() {
 	PORTB::ClockEnable();
 	PORTC::ClockEnable();
 
-	// TODO: move Init's to CTRL::Init
-	CURSEL1::Init();
-	CURSEL2::Init();
-
 	exti::Init();
-	BTN::Init();
 
-	ADCD::Init();
-
-	IND::Init();
-	IND::ShowBootLogo();
-
+	CTRL::Init();
 	while(1) {
 		CTRL::Tick();
 	}

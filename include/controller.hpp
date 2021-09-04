@@ -28,8 +28,8 @@ class controller_c {
 		LAST_STATE
 	};
 
-	static constexpr uint16_t CURRENT_LIMIT_MV = 4000;
-	static constexpr uint16_t MILLIVOLT_HYSTERESIS = 40;
+	static constexpr uint16_t CURRENT_LIMIT_MV = 4050;
+	static constexpr uint16_t MILLIVOLT_HYSTERESIS = 20;
 	static constexpr uint16_t timeoutMs = 3000;
 	static constexpr uint16_t showTimeoutMs = 1500;
 
@@ -65,7 +65,7 @@ class controller_c {
 					CURSEL2::Set(current_t::CUR_1A0);
 				}
 
-				IND::ShowAnimationOverload();
+				// IND::ShowAnimationOverload(); //disable animation
 				firstTime = false;
 			}
 		} else {
@@ -169,6 +169,20 @@ class controller_c {
 	}
 
 public:
+
+	static void Init() noexcept {
+		CURSEL1::Init();
+		CURSEL2::Init();
+
+		BTN::Init();
+		ADCD::Init();
+
+		IND::Init();
+		IND::ShowBootLogo();
+
+		CURSEL1::Set(current_t::CUR_0A5);
+		CURSEL2::Set(current_t::CUR_0A5);
+	}
 
 	static void Tick() noexcept {
 		if (t1.IsSet()) {

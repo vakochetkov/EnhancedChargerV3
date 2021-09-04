@@ -21,7 +21,9 @@ class adc_c {
 	// x = (val / 4095 * 3300 * 2)
 	static constexpr uint32_t COEF_MVOLT_DIV = 4095;
 	static constexpr uint32_t COEF_MVOLT_MUL = 3300 * 2;
-	static constexpr uint32_t MVOLT_OFFSET = 80;
+	static constexpr uint32_t MVOLT_OFFSET = 70;
+	static constexpr uint32_t MVOLT_OFFSET_CH1 = 5;
+	static constexpr uint32_t MVOLT_OFFSET_CH2 = 30;
 
 	static uint32_t convertValue(uint32_t value) noexcept {
 		return (((value * COEF_MVOLT_MUL) / COEF_MVOLT_DIV) + MVOLT_OFFSET);
@@ -118,8 +120,8 @@ public:
 		valueChannel2 = read();
 
 		switch(adcChannel) {
-		case 0: return convertValue(valueChannel1);
-		case 1: return convertValue(valueChannel2);
+		case 0: return (convertValue(valueChannel1) + MVOLT_OFFSET_CH1);
+		case 1: return (convertValue(valueChannel2) + MVOLT_OFFSET_CH2);
 		default: return 0;
 		}
 	}

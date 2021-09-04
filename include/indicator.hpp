@@ -52,14 +52,6 @@ public:
 	}
 
 	static void ShowBootLogo() noexcept {
-		TM1628::WriteDigit(I1, miscSymbols[0]);
-		delay_ms(150);
-		TM1628::WriteDigit(I2, miscSymbols[0]);
-		delay_ms(150);
-		TM1628::WriteDigit(I3, miscSymbols[0]);
-		delay_ms(150);
-		TM1628::WriteDigit(I4, miscSymbols[0]);
-		delay_ms(150);
 
 		for (uint8_t i = 0; i < animationClockwiseSize; i++) {
 			TM1628::WriteDigit(I1, animationClockwise[i]);
